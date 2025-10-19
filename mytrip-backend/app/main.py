@@ -15,6 +15,7 @@ app.add_middleware(
         "http://localhost:3000",  # Frontend local
         "https://mytrip-frontend-rd09gaayz-msousa200s-projects.vercel.app",  # Vercel preview
         "https://*.vercel.app",  # Todos os domínios Vercel
+        "*",  # Permitir todas as origens (para Render)
     ],
     allow_credentials=True,
     allow_methods=["*"],
