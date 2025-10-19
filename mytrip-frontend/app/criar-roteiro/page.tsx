@@ -85,12 +85,15 @@ export default function CreateTrip() {
     setError('');
 
     try {
-      // Adiciona o país ao payload
+      // Envia apenas a região/cidade selecionada para evitar confusão
       const payload = {
         ...formData,
         country: selectedCountry,
-        region: `${formData.region}, ${selectedCountry}` // Ex: "Barcelona, Espanha"
+        // Envia região formatada: "Cidade, País" para contexto completo
+        region: `${formData.region}, ${selectedCountry}`
       };
+      
+      console.log('📤 Enviando payload:', JSON.stringify(payload, null, 2));
       
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
       const response = await fetch(`${apiUrl}/api/v1/trips`, {
