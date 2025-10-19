@@ -318,15 +318,18 @@ Inclua dicas práticas sobre transporte local, melhores horários para visitar, 
             return completion.choices[0].message.content
             
         except Exception as e:
+            # Log detalhado do erro
+            print(f"❌ ERRO DETALHADO: {type(e).__name__}: {str(e)}")
+            
             # Se houver erro (sem créditos, rate limit, etc), usa mock
             error_msg = str(e).lower()
-            if any(err in error_msg for err in ["insufficient_quota", "rate_limit", "429", "quota"]):
+            if any(err in error_msg for err in ["insufficient_quota", "rate_limit", "429", "quota", "limit"]):
                 print(f"⚠️  IA sem créditos/limite atingido. Usando modo mock...")
                 return self._generate_mock_response(region, duration_days)
             else:
                 # Outros erros, relança
-                print(f"❌ Erro na IA: {e}")
-                raise
+                print(f"❌ Erro inesperado na IA, usando mock: {e}")
+                return self._generate_mock_response(region, duration_days)
     
     def _generate_mock_response(self, region: str, duration_days: int) -> str:
         """Gera resposta mock dinâmica para testes sem API key"""
