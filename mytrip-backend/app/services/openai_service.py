@@ -78,10 +78,11 @@ class OpenAIService:
         # Detecta se é um destino europeu fora de Portugal
         is_portugal = any(term in region.lower() for term in ['portugal', 'lisboa', 'porto', 'algarve', 'douro', 'braga', 'coimbra', 'aveiro'])
         location_context = "em Portugal" if is_portugal else "na Europa"
+        cuisine_type = "portuguesa" if is_portugal else "local do destino"
         
-        prompt = f"""Crie um roteiro de viagem MUITO DETALHADO {location_context} com horários específicos das 8:00 às 19:00.
+        prompt = f"""Crie um roteiro de viagem MUITO DETALHADO para {region.upper()} {location_context} com horários específicos das 8:00 às 19:00.
 
-**Destino**: {region}
+**DESTINO OBRIGATÓRIO**: {region.upper()} (TODAS as atrações e restaurantes DEVEM ser de {region.upper()}, NÃO de outro lugar!)
 **Duração**: {duration_days} dia(s)
 **Orçamento Diário**: {daily_budget}
 **Categoria**: {budget_category}
@@ -162,26 +163,26 @@ Formato JSON OBRIGATÓRIO:
         {{
           "type": "Pequeno-almoço",
           "time": "08:00",
-          "restaurant": "Nome real do café/restaurante (ajustado ao orçamento {daily_budget})",
-          "suggestion": "Opção típica portuguesa",
+          "restaurant": "Nome real do café/restaurante EM {region.upper()} (ajustado ao orçamento {daily_budget})",
+          "suggestion": "Opção típica {cuisine_type}",
           "estimated_cost": "Preço real ajustado ao orçamento {daily_budget}",
-          "location": "Perto do hotel/primeiro local"
+          "location": "Perto do hotel/primeiro local EM {region.upper()}"
         }},
         {{
           "type": "Almoço",
           "time": "13:00",
-          "restaurant": "Nome real do restaurante (ajustado ao orçamento {daily_budget})",
-          "suggestion": "Prato típico da região",
+          "restaurant": "Nome real do restaurante EM {region.upper()} (ajustado ao orçamento {daily_budget})",
+          "suggestion": "Prato típico de {region.upper()}",
           "estimated_cost": "Preço real ajustado ao orçamento {daily_budget}",
-          "location": "Zona onde estará na hora"
+          "location": "Zona onde estará na hora EM {region.upper()}"
         }},
         {{
           "type": "Jantar",
           "time": "19:30",
-          "restaurant": "Nome real do restaurante (categoria {budget})",
-          "suggestion": "Especialidade da casa",
+          "restaurant": "Nome real do restaurante EM {region.upper()} (categoria {budget})",
+          "suggestion": "Especialidade de {region.upper()}",
           "estimated_cost": "Preço real ajustado ao orçamento {budget}",
-          "location": "Perto do hotel"
+          "location": "Perto do hotel EM {region.upper()}"
         }}
       ],
       "accommodation_suggestion": "Hotel específico ou zona recomendada"
