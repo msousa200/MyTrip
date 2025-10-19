@@ -11,7 +11,11 @@ app = FastAPI(
 # Configurar CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Frontend Next.js
+    allow_origins=[
+        "http://localhost:3000",  # Frontend local
+        "https://mytrip-frontend-rd09gaayz-msousa200s-projects.vercel.app",  # Vercel preview
+        "https://*.vercel.app",  # Todos os domínios Vercel
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
