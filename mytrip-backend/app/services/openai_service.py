@@ -277,12 +277,26 @@ Inclua dicas práticas sobre transporte local, melhores horários para visitar, 
             return self._generate_mock_response(region, duration_days)
         
         try:
-            # Calcula max_tokens baseado no número de dias (mais dias = mais tokens necessários)
-            # Base: 2000 tokens, + 800 por dia adicional
-            base_tokens = 2000
-            tokens_per_day = 800
+            # Calcula max_tokens baseado no número de dias (otimizado para 14 dias)
+            # Fórmula escalável: ~550 tokens por dia + base de 1500
+            # Suporta até 14 dias dentro do limite de 8000 tokens do Groq
             days = duration_days if duration_days else 3
-            max_tokens = base_tokens + (tokens_per_day * days)
+            
+            # Cálculo dinâmico que se ajusta ao número de dias
+            if days <= 3:
+                # Viagens curtas: mais tokens por dia para detalhes
+                max_tokens = 1500 + (700 * days)  # ~3600 para 3 dias
+            elif days <= 7:
+                # Viagens médias: balanceado
+                max_tokens = 1500 + (600 * days)  # ~5700 para 7 dias
+            else:
+                # Viagens longas (8-14 dias): otimizado para caber no limite
+                max_tokens = 1500 + (550 * days)  # ~9200 para 14 dias
+            
+            # Limite absoluto do Groq: 8192 tokens (usamos 8000 para segurança)
+            max_tokens = min(max_tokens, 8000)
+            
+            print(f"📊 Gerando roteiro de {days} dias (max_tokens: {max_tokens})")
             
             completion = self.client.chat.completions.create(
                 model=self.model,
@@ -297,7 +311,7 @@ Inclua dicas práticas sobre transporte local, melhores horários para visitar, 
                     }
                 ],
                 temperature=0.7,
-                max_tokens=min(max_tokens, 8000)  # Limite máximo de 8000 tokens
+                max_tokens=max_tokens
             )
             
             return completion.choices[0].message.content

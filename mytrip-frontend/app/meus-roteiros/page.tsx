@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getSavedTrips, deleteTrip, SavedTrip } from '@/lib/storage';
+import ScrollAnimation from '@/app/components/ScrollAnimation';
 
 interface TripSummary {
   id: string;
@@ -84,16 +85,18 @@ export default function MyTrips() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8">
-          <div className="mb-4">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              Meus Roteiros
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300">
-              {trips.length > 0 ? `${trips.length} roteiro(s) guardado(s)` : 'Gerencie todos os seus roteiros de viagem'}
-            </p>
+        <ScrollAnimation direction="fade">
+          <div className="mb-8">
+            <div className="mb-4">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                Meus Roteiros
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300">
+                {trips.length > 0 ? `${trips.length} roteiro(s) guardado(s)` : 'Gerencie todos os seus roteiros de viagem'}
+              </p>
+            </div>
           </div>
-        </div>
+        </ScrollAnimation>
 
         {loading ? (
           <div className="text-center py-12">
@@ -123,11 +126,9 @@ export default function MyTrips() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {trips.map((trip) => (
-              <div
-                key={trip.id}
-                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden"
-              >
+            {trips.map((trip, index) => (
+              <ScrollAnimation key={trip.id} direction="up" delay={index * 100}>
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
@@ -182,7 +183,8 @@ export default function MyTrips() {
                     Ver Roteiro →
                   </Link>
                 </div>
-              </div>
+                </div>
+              </ScrollAnimation>
             ))}
           </div>
         )}

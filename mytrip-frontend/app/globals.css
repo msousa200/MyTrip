@@ -24,3 +24,42 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Scroll Animations */
+.scroll-animate-up,
+.scroll-animate-down,
+.scroll-animate-left,
+.scroll-animate-right,
+.scroll-animate-fade {
+  opacity: 0;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-animate-up {
+  transform: translateY(50px);
+}
+
+.scroll-animate-down {
+  transform: translateY(-50px);
+}
+
+.scroll-animate-left {
+  transform: translateX(50px);
+}
+
+.scroll-animate-right {
+  transform: translateX(-50px);
+}
+
+.scroll-animate-fade {
+  transform: scale(0.95);
+}
+
+.scroll-animate-up.animate-in,
+.scroll-animate-down.animate-in,
+.scroll-animate-left.animate-in,
+.scroll-animate-right.animate-in,
+.scroll-animate-fade.animate-in {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}

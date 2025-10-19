@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import ScrollAnimation from '@/app/components/ScrollAnimation';
 
 interface Place {
   name: string;
@@ -149,26 +150,27 @@ export default function TripDetails() {
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Trip Header */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-8">
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                Roteiro para {trip.region}
-              </h2>
-              <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
-                <span>⏱️ {trip.duration_days} {trip.duration_days === 1 ? 'dia' : 'dias'}</span>
-                {trip.budget && (
-                  <span>
-                    💰{' '}
-                    {trip.budget === 'low'
-                      ? 'Económico'
-                      : trip.budget === 'medium'
-                      ? 'Moderado'
-                      : 'Premium'}
-                  </span>
-                )}
+        <ScrollAnimation direction="fade">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-8">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                  Roteiro para {trip.region}
+                </h2>
+                <div className="flex items-center gap-4 text-gray-600 dark:text-gray-300">
+                  <span>⏱️ {trip.duration_days} {trip.duration_days === 1 ? 'dia' : 'dias'}</span>
+                  {trip.budget && (
+                    <span>
+                      💰{' '}
+                      {trip.budget === 'low'
+                        ? 'Económico'
+                        : trip.budget === 'medium'
+                        ? 'Moderado'
+                        : 'Premium'}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
             
             {/* Botões de Ação */}
             <div className="flex flex-wrap gap-2">
@@ -219,15 +221,14 @@ export default function TripDetails() {
               ))}
             </div>
           )}
-        </div>
+          </div>
+        </ScrollAnimation>
 
         {/* Itinerary Days */}
         <div className="space-y-6">
-          {trip.itinerary.map((day) => (
-            <div
-              key={day.day}
-              className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6"
-            >
+          {trip.itinerary.map((day, index) => (
+            <ScrollAnimation key={day.day} direction="up" delay={index * 100}>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
                   {day.day}
@@ -328,34 +329,38 @@ export default function TripDetails() {
                   </div>
                 </div>
               )}
-            </div>
+              </div>
+            </ScrollAnimation>
           ))}
         </div>
 
         {/* Tips */}
         {trip.tips && trip.tips.length > 0 && (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mt-8">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              💡 Dicas Importantes
-            </h3>
-            <ul className="space-y-2">
-              {trip.tips.map((tip, index) => (
-                <li
-                  key={index}
-                  className="flex items-start gap-2 text-gray-600 dark:text-gray-300"
-                >
-                  <span className="text-indigo-600 dark:text-indigo-400 mt-1">
-                    •
-                  </span>
-                  <span>{tip}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ScrollAnimation direction="up" delay={100}>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mt-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                💡 Dicas Importantes
+              </h3>
+              <ul className="space-y-2">
+                {trip.tips.map((tip, index) => (
+                  <li
+                    key={index}
+                    className="flex items-start gap-2 text-gray-600 dark:text-gray-300"
+                  >
+                    <span className="text-indigo-600 dark:text-indigo-400 mt-1">
+                      •
+                    </span>
+                    <span>{tip}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </ScrollAnimation>
         )}
 
         {/* Action Buttons */}
-        <div className="flex gap-4 mt-8">
+        <ScrollAnimation direction="fade" delay={200}>
+          <div className="flex gap-4 mt-8">
           <Link
             href="/criar-roteiro"
             className="flex-1 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors font-semibold text-center"
@@ -368,7 +373,8 @@ export default function TripDetails() {
           >
             📋 Ver Meus Roteiros
           </Link>
-        </div>
+          </div>
+        </ScrollAnimation>
       </main>
     </div>
   );

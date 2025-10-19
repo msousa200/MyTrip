@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import ScrollAnimation from '@/app/components/ScrollAnimation';
 
 interface TripRequest {
   region: string;
@@ -164,13 +165,14 @@ export default function CreateTrip() {
 
       {/* Main Content */}
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Criar Novo Roteiro
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-8">
-            Preencha os detalhes da sua viagem e deixe a IA criar o roteiro perfeito para si.
-          </p>
+        <ScrollAnimation direction="fade">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              Criar Novo Roteiro
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-8">
+              Preencha os detalhes da sua viagem e deixe a IA criar o roteiro perfeito para si.
+            </p>
 
           {error && (
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400">
@@ -193,7 +195,7 @@ export default function CreateTrip() {
                 required
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
-                {Object.keys(europeanDestinations).map((country) => (
+                {Object.keys(europeanDestinations).sort().map((country) => (
                   <option key={country} value={country}>
                     {country}
                   </option>
@@ -215,7 +217,7 @@ export default function CreateTrip() {
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
                 <option value="">Selecione uma região ou cidade</option>
-                {regions.map((region) => (
+                {regions.sort().map((region) => (
                   <option key={region} value={region}>
                     {region}
                   </option>
@@ -232,7 +234,7 @@ export default function CreateTrip() {
                 <input
                   type="range"
                   min="1"
-                  max="14"
+                  max="10"
                   value={formData.duration_days}
                   onChange={(e) =>
                     setFormData({
@@ -387,7 +389,8 @@ export default function CreateTrip() {
               </button>
             </div>
           </form>
-        </div>
+          </div>
+        </ScrollAnimation>
       </main>
     </div>
   );
