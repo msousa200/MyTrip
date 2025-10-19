@@ -275,6 +275,21 @@ export default function TripDetails() {
                           </div>
                         )}
                       </div>
+                      
+                      {/* Botão Ver Direções */}
+                      <a
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(place.name + ', ' + trip.region)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-4 group flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg flex-shrink-0"
+                        title="Abrir no Google Maps"
+                      >
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        <span className="font-medium hidden sm:inline">Direções</span>
+                        <span className="font-medium sm:hidden text-xs">Ver</span>
+                      </a>
                     </div>
                     <p className="text-gray-600 dark:text-gray-300 mb-2">
                       {place.description}
@@ -314,7 +329,7 @@ export default function TripDetails() {
                         <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
                           {meal.suggestion}
                         </p>
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between mb-3">
                           <span className="text-sm font-bold text-green-600 dark:text-green-400">
                             {meal.estimated_cost}
                           </span>
@@ -324,6 +339,20 @@ export default function TripDetails() {
                             </span>
                           )}
                         </div>
+                        
+                        {/* Botão Ver no Mapa */}
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(meal.restaurant + ', ' + (meal.location || trip.region))}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium shadow-sm hover:shadow-md"
+                          title="Ver no Google Maps"
+                        >
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                          </svg>
+                          Ver no Mapa
+                        </a>
                       </div>
                     ))}
                   </div>
