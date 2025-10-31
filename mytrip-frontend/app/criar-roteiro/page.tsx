@@ -178,8 +178,6 @@ export default function CreateTrip() {
       // ...existing code...
       if (supaId) {
         router.push(`/roteiro/${supaId}`);
-      } else {
-        setError('ID do roteiro não encontrado.');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao criar roteiro');
