@@ -166,6 +166,7 @@ export default function CreateTrip() {
         let supaId = null;
         if (userId) {
           const { data: supaData, error: supaError } = await saveTripToSupabase(tripToSave, userId);
+          console.log('Supabase insert result:', supaData, supaError);
           if (supaError || !supaData || !supaData[0]?.id) {
             setError('Erro ao salvar roteiro no Supabase');
             setLoading(false);
