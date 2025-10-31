@@ -177,7 +177,9 @@ export default function CreateTrip() {
       }
       // ...existing code...
       if (supaId) {
+        console.log('Redirecionando para:', `/roteiro/${supaId}`);
         router.push(`/roteiro/${supaId}`);
+        console.log('Redirecionamento chamado');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao criar roteiro');
