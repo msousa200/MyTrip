@@ -124,7 +124,12 @@ export default function CreateTrip() {
       // ...existing code...
       console.log('📤 Enviando payload:', JSON.stringify(payload, null, 2));
       // ...existing code...
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        setError('API URL não configurada.');
+        setLoading(false);
+        return;
+      }
       const response = await fetch(`${apiUrl}/api/v1/trips`, {
         method: 'POST',
         headers: {
