@@ -58,32 +58,27 @@ export default function TripDetails() {
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        // Primeiro tenta carregar do localStorage
-        const { getTripById } = await import('@/lib/storage');
-        const localTrip = getTripById(tripId);
-        
-        if (localTrip) {
-          setTrip(localTrip as any);
-          setLoading(false);
-          return;
-        }
+        // Busca direto do Supabase
+        const { supabase } = await import('@/lib/supabaseClient');
+        const { data, error } = await supabase
+          .from('roteiros')
+          .select('*')
+          .eq('id', tripId)
+          .single();
 
-        // Se não encontrar no localStorage, tenta no backend
-        const response = await fetch(`http://localhost:8001/api/v1/trips/${tripId}`);
-        
-        if (!response.ok) {
-          throw new Error('Roteiro não encontrado');
+        if (error || !data) {
+          setError('Roteiro não encontrado');
+          setTrip(null);
+        } else {
+          setTrip(data);
         }
-
-        const data = await response.json();
-        setTrip(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Erro ao carregar roteiro');
+        setTrip(null);
       } finally {
         setLoading(false);
       }
     };
-
     fetchTrip();
   }, [tripId]);
 
