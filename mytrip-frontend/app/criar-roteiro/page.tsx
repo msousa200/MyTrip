@@ -1,7 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabaseClient';
+import { saveTripToSupabase } from '@/lib/supabaseTrip';
 import Link from 'next/link';
+import AuthButton from '@/app/components/AuthButton';
 import { useRouter } from 'next/navigation';
 import ScrollAnimation from '@/app/components/ScrollAnimation';
 
@@ -25,6 +28,24 @@ export default function CreateTrip() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [user, setUser] = useState<any>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  useEffect(() => {
+    const getSession = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUser(data?.user ?? null);
+      setAuthLoading(false);
+    };
+    getSession();
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setAuthLoading(false);
+    });
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
   const europeanDestinations = {
     'Portugal': ['Lisboa', 'Porto', 'Algarve', 'Douro', 'Alentejo', 'Coimbra', 'Braga', 'Aveiro', 'Sintra', 'Madeira', 'Açores', 'Guimarães', 'Óbidos', 'Évora', 'Cascais', 'Faro', 'Setúbal', 'Nazaré', 'Viana do Castelo', 'Monsanto'],
@@ -84,7 +105,15 @@ export default function CreateTrip() {
     setLoading(true);
     setError('');
 
+    // Se não estiver logado, direciona para login
+    if (!user) {
+      setLoading(false);
+      setError('É necessário estar logado para criar um roteiro.');
+      return;
+    }
+
     try {
+      // ...existing code...
       // Envia apenas a região/cidade selecionada para evitar confusão
       const payload = {
         ...formData,
@@ -92,9 +121,9 @@ export default function CreateTrip() {
         // Envia região formatada: "Cidade, País" para contexto completo
         region: `${formData.region}, ${selectedCountry}`
       };
-      
+      // ...existing code...
       console.log('📤 Enviando payload:', JSON.stringify(payload, null, 2));
-      
+      // ...existing code...
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001';
       const response = await fetch(`${apiUrl}/api/v1/trips`, {
         method: 'POST',
@@ -109,25 +138,32 @@ export default function CreateTrip() {
       }
 
       const data = await response.json();
-      
-      // Guarda o roteiro no localStorage
+      // ...existing code...
       if (typeof window !== 'undefined') {
         const { saveTrip } = await import('@/lib/storage');
-        saveTrip({
+        const tripToSave = {
           id: data.id,
           region: data.region,
+          country: selectedCountry,
           duration_days: data.duration_days,
-          budget: formData.budget,
+          budget_min: formData.budget_min,
+          budget_max: formData.budget_max,
           interests: formData.interests,
           created_at: new Date().toISOString(),
           itinerary: data.itinerary,
           general_tips: data.general_tips,
           estimated_cost: data.estimated_cost,
           best_season: data.best_season,
-        });
+        };
+        saveTrip(tripToSave);
+
+        // Salva no Supabase vinculado ao usuário autenticado
+        const userId = user.id;
+        if (userId) {
+          await saveTripToSupabase(tripToSave, userId);
+        }
       }
-      
-      // Redirect to the trip details page
+      // ...existing code...
       router.push(`/roteiro/${data.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao criar roteiro');
@@ -162,6 +198,7 @@ export default function CreateTrip() {
                 <span className="hidden sm:inline">Meus Roteiros</span>
                 <span className="sm:hidden">Roteiros</span>
               </Link>
+              <AuthButton />
             </nav>
           </div>
         </div>

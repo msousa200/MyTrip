@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import AuthButton from '@/app/components/AuthButton';
 import { getSavedTrips, deleteTrip, SavedTrip } from '@/lib/storage';
 import ScrollAnimation from '@/app/components/ScrollAnimation';
 
@@ -78,6 +79,7 @@ export default function MyTrips() {
                 <span className="hidden sm:inline">Meus Roteiros</span>
                 <span className="sm:hidden">Roteiros</span>
               </Link>
+              <AuthButton />
             </nav>
           </div>
         </div>

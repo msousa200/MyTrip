@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import ScrollAnimation from './components/ScrollAnimation';
+import AuthButton from './components/AuthButton';
 
 export default function Home() {
   return (
@@ -14,7 +15,7 @@ export default function Home() {
                 MyTrip
               </h1>
             </div>
-            <nav className="flex gap-2 sm:gap-4">
+            <nav className="flex gap-2 sm:gap-4 items-center">
               <Link 
                 href="/criar-roteiro"
                 className="px-3 py-1.5 sm:px-4 sm:py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-sm sm:text-base"
@@ -29,6 +30,10 @@ export default function Home() {
                 <span className="hidden sm:inline">Meus Roteiros</span>
                 <span className="sm:hidden">Roteiros</span>
               </Link>
+              {/* Botão de autenticação Supabase */}
+              <div className="ml-2">
+                <AuthButton />
+              </div>
             </nav>
           </div>
         </div>
