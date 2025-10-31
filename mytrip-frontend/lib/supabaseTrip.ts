@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabaseClient';
 
 export async function saveTripToSupabase(trip: any, userId: string) {
-  const { error } = await supabase.from('roteiros').insert([
+  const { data, error } = await supabase.from('roteiros').insert([
     {
       user_id: userId,
       region: trip.region,
@@ -16,6 +16,6 @@ export async function saveTripToSupabase(trip: any, userId: string) {
       estimated_cost: trip.estimated_cost,
       best_season: trip.best_season,
     }
-  ]);
-  return error;
+  ]).select();
+  return { data, error };
 }

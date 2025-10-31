@@ -104,6 +104,7 @@ export default function CreateTrip() {
     e.preventDefault();
     setLoading(true);
     setError('');
+    let supaId = null;
 
     // Se não estiver logado, direciona para login
     if (!user) {
@@ -162,12 +163,23 @@ export default function CreateTrip() {
 
         // Salva no Supabase vinculado ao usuário autenticado
         const userId = user.id;
+        let supaId = null;
         if (userId) {
-          await saveTripToSupabase(tripToSave, userId);
+          const { data: supaData, error: supaError } = await saveTripToSupabase(tripToSave, userId);
+          if (supaError || !supaData || !supaData[0]?.id) {
+            setError('Erro ao salvar roteiro no Supabase');
+            setLoading(false);
+            return;
+          }
+          supaId = supaData[0].id;
         }
       }
       // ...existing code...
-      router.push(`/roteiro/${data.id}`);
+      if (supaId) {
+        router.push(`/roteiro/${supaId}`);
+      } else {
+        setError('ID do roteiro não encontrado.');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao criar roteiro');
       setLoading(false);
