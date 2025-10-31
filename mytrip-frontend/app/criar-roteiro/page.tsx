@@ -145,38 +145,34 @@ export default function CreateTrip() {
 
       const data = await response.json();
       // ...existing code...
-      if (typeof window !== 'undefined') {
-        const tripToSave = {
-          id: data.id,
-          region: data.region,
-          country: selectedCountry,
-          duration_days: data.duration_days,
-          budget_min: formData.budget_min,
-          budget_max: formData.budget_max,
-          interests: formData.interests,
-          created_at: new Date().toISOString(),
-          itinerary: data.itinerary,
-          general_tips: data.general_tips,
-          estimated_cost: data.estimated_cost,
-          best_season: data.best_season,
-        };
+      const tripToSave = {
+        id: data.id,
+        region: data.region,
+        country: selectedCountry,
+        duration_days: data.duration_days,
+        budget_min: formData.budget_min,
+        budget_max: formData.budget_max,
+        interests: formData.interests,
+        created_at: new Date().toISOString(),
+        itinerary: data.itinerary,
+        general_tips: data.general_tips,
+        estimated_cost: data.estimated_cost,
+        best_season: data.best_season,
+      };
 
-        // Salva no Supabase vinculado ao usuário autenticado
-        const userId = user.id;
-        let supaId = null;
-        if (userId) {
-          const { data: supaData, error: supaError } = await saveTripToSupabase(tripToSave, userId);
-          console.log('Supabase insert result:', supaData, supaError);
-          if (supaError || !supaData || !supaData[0]?.id) {
-            setError('Erro ao salvar roteiro no Supabase');
-            setLoading(false);
-            return;
-          }
-          supaId = supaData[0].id;
+      // Salva no Supabase vinculado ao usuário autenticado
+      const userId = user.id;
+      let supaId = null;
+      if (userId) {
+        const { data: supaData, error: supaError } = await saveTripToSupabase(tripToSave, userId);
+        console.log('Supabase insert result:', supaData, supaError);
+        if (supaError || !supaData || !supaData[0]?.id) {
+          setError('Erro ao salvar roteiro no Supabase');
+          setLoading(false);
+          return;
         }
-      }
-      // ...existing code...
-      if (supaId) {
+        supaId = supaData[0].id;
+        setLoading(false);
         console.log('Redirecionando para:', `/roteiro/${supaId}`);
         router.push(`/roteiro/${supaId}`);
         console.log('Redirecionamento chamado');
