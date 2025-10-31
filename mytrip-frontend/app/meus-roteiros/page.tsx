@@ -6,6 +6,7 @@ import AuthButton from '@/app/components/AuthButton';
 import { supabase } from '@/lib/supabaseClient';
 import ScrollAnimation from '@/app/components/ScrollAnimation';
 
+interface TripSummary {
   id: string;
   region: string;
   duration_days: number;
@@ -169,7 +170,6 @@ import ScrollAnimation from '@/app/components/ScrollAnimation';
                       </div>
                     </div>
                     <button
-                      {/* Remover botão de apagar, pois não está implementado no Supabase */}
                   </div>
 
                   <div className="text-xs text-gray-500 dark:text-gray-400 mb-4">
