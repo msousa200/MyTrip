@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.78.0",
     "jspdf": "^3.0.3",
     "next": "15.5.6",
     "react": "19.1.0",
