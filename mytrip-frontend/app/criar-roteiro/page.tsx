@@ -140,7 +140,6 @@ export default function CreateTrip() {
       const data = await response.json();
       // ...existing code...
       if (typeof window !== 'undefined') {
-        const { saveTrip } = await import('@/lib/storage');
         const tripToSave = {
           id: data.id,
           region: data.region,
@@ -155,7 +154,6 @@ export default function CreateTrip() {
           estimated_cost: data.estimated_cost,
           best_season: data.best_season,
         };
-        saveTrip(tripToSave);
 
         // Salva no Supabase vinculado ao usuário autenticado
         const userId = user.id;

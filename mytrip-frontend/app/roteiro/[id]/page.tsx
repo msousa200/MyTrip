@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import AuthButton from '@/app/components/AuthButton';
 import { useParams } from 'next/navigation';
 import ScrollAnimation from '@/app/components/ScrollAnimation';
 
@@ -142,6 +143,7 @@ export default function TripDetails() {
                 <span className="hidden sm:inline">Meus Roteiros</span>
                 <span className="sm:hidden">Roteiros</span>
               </Link>
+              <AuthButton />
             </nav>
           </div>
         </div>
